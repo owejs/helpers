@@ -18,24 +18,24 @@ describe("string", () => {
 
 		it("should behave like implicit string coercion for all other values", () => {
 			expect(string.convert("test")).to.be("test");
-			expect(string.convert(1)).to.be("" + 1);
-			expect(string.convert(true)).to.be("" + true);
-			expect(string.convert(null)).to.be("" + null);
-			expect(string.convert(undefined)).to.be("" + undefined);
-			expect(string.convert(() => 1)).to.be("" + (() => 1));
-			expect(string.convert({})).to.be("" + {});
+			expect(string.convert(1)).to.be(String(1));
+			expect(string.convert(true)).to.be(String(true));
+			expect(string.convert(null)).to.be(String(null));
+			expect(string.convert(undefined)).to.be(String(undefined));
+			expect(string.convert(() => 1)).to.be(String(() => 1));
+			expect(string.convert({})).to.be(String({}));
 			expect(string.convert({
 				toString: () => "a"
 			})).to.be("a");
 			expect(string.convert({
 				valueOf: () => 2
-			})).to.be("" + 2);
+			})).to.be(String(2));
 		});
 	});
 
 	describe("tag", () => {
 		it("should behave like String.raw but apply string.convert on each substitution first", () => {
-			expect(string.tag`abc`).to.be(`abc`);
+			expect(string.tag`abc`).to.be("abc");
 			expect(string.tag`abc${1}`).to.be(`abc${1}`);
 			expect(string.tag`abc${{}}`).to.be(`abc${{}}`);
 			expect(string.tag`x${Object.create(null)}x`).to.be("x[object Object]x");

@@ -8,7 +8,7 @@ const string = module.exports = {
 		if(val && typeof val === "object" && typeof val.toString !== "function")
 			return Object.prototype.toString.call(val);
 
-		return "" + val;
+		return "" + val; // eslint-disable-line prefer-template
 	},
 
 	tag(strings) {

@@ -43,7 +43,7 @@ module.exports = function filterTool(target, input, filter, callback) {
 		result = !!filter.get(input);
 	else if(Array.isArray(filter))
 		result = filter.indexOf(input) !== -1;
-	else if(typeof filter === "object")
+	else if(filter && typeof filter === "object")
 		result = !!filter[input];
 
 	return callback(result);

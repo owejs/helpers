@@ -66,4 +66,12 @@ describe("filter", () => {
 				.then(res => expect(res).to.be("x"))
 		]);
 	});
+
+	it("should return false for all other types of filters", () => {
+		expect(filter(null, null, null)).to.be(false);
+		expect(filter(null, undefined, undefined)).to.be(false);
+		expect(filter(null, "test", "test")).to.be(false);
+		expect(filter(null, 42, 42)).to.be(false);
+		expect(filter(null, Symbol.for("test"), Symbol.for("test"))).to.be(false);
+	});
 });
