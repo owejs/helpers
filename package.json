@@ -36,6 +36,7 @@
 		"coveralls": "2.11.9"
 	},
 	"scripts": {
-		"test": "./node_modules/.bin/gulp test"
+		"test": "./node_modules/.bin/gulp test",
+		"prepublish": "./node_modules/.bin/gulp test"
 	}
 }
