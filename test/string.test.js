@@ -36,7 +36,7 @@ describe("string", () => {
 	describe("tag", () => {
 		it("should behave like String.raw but apply string.convert on each substitution first", () => {
 			expect(string.tag`abc`).to.be("abc");
-			expect(string.tag`abc${1}`).to.be(`abc${1}`);
+			expect(string.tag`${2}abc${1}`).to.be(`${2}abc${1}`);
 			expect(string.tag`abc${{}}`).to.be(`abc${{}}`);
 			expect(string.tag`x${Object.create(null)}x`).to.be("x[object Object]x");
 			expect(string.tag`x${Symbol()}x`).to.be("xSymbol()x");

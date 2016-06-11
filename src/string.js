@@ -11,12 +11,5 @@ const string = module.exports = {
 		return "" + val; // eslint-disable-line prefer-template
 	},
 
-	tag(strings) {
-		const args = [];
-
-		for(let i = 1; i < arguments.length; i++)
-			args.push(string.convert(arguments[i]));
-
-		return String.raw(strings, ...args);
-	}
+	tag: (strings, ...args) => String.raw(strings, ...args.map(string.convert))
 };
