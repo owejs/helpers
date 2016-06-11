@@ -1,77 +1,70 @@
 "use strict";
 
-const expect = require("expect.js");
+const expect = require("chai").expect;
 
 const filter = require("../src/filter.js");
 
 describe("filter", () => {
 	it("should handle booleans", () => {
-		expect(filter(null, "test", true)).to.be(true);
-		expect(filter(null, false, true)).to.be(true);
-		expect(filter(null, "test", false)).to.be(false);
-		expect(filter(null, true, false)).to.be(false);
-	});
-
-	it("should handle regex", () => {
-		expect(filter(null, "test", /t/)).to.be(true);
-		expect(filter(null, "derp", /t/)).to.be(false);
-	});
-
-	it("should handle Sets", () => {
-		expect(filter(null, "test", new Set(["a", "b", "test"]))).to.be(true);
-		expect(filter(null, "derp", new Set(["a", "b", "test"]))).to.be(false);
-	});
-
-	it("should handle Maps", () => {
-		expect(filter(null, "test", new Map([
-			["test", true],
-			["derp", false]
-		]))).to.be(true);
-		expect(filter(null, "derp", new Map([
-			["test", true],
-			["derp", false]
-		]))).to.be(false);
-	});
-
-	it("should handle arrays", () => {
-		expect(filter(null, "test", ["a", "b", "test"])).to.be(true);
-		expect(filter(null, "derp", ["a", "b", "test"])).to.be(false);
-	});
-
-	it("should handle objects", () => {
-		expect(filter(null, "test", {
-			test: true,
-			derp: false
-		})).to.be(true);
-		expect(filter(null, "derp", {
-			test: true,
-			derp: false
-		})).to.be(false);
-	});
-
-	it("should return what the callback function returns", () => {
-		expect(filter(null, "test", ["a", "b", "test"], res => res ? "a" : "b")).to.be("a");
-		expect(filter(null, "derp", ["a", "b", "test"], res => res ? "a" : "b")).to.be("b");
-	});
-
-	it("should handle functions", () => {
 		return Promise.all([
-			filter(null, "test", val => val === "test").then(res => expect(res).to.be(true)),
-			filter(null, "derp", val => val === "test").then(res => expect(res).to.be(false)),
-			filter(null, "test", () => ["a", "b", "test"]).then(res => expect(res).to.be(true)),
-			filter(null, "derp", () => {
-				throw new Error("nope");
-			}, res => res ? "a" : "b").then(res => expect(res).to.be("b")),
-			filter(null, "derp", () => Promise.reject(new Error("nope")), res => res ? "y" : "x")
-				.then(res => expect(res).to.be("x"))
+			expect(filter(true, null, null)).to.eventually.equal(true),
+			expect(filter(true)).to.eventually.equal(true),
+			expect(filter(true, null, "test")).to.eventually.equal(true),
+			expect(filter(true, null, {})).to.eventually.equal(true),
+			expect(filter(true, null, 123)).to.eventually.equal(true),
+			expect(filter(true, null, Symbol("test"))).to.eventually.equal(true),
+
+			expect(filter(false, null, null)).to.eventually.equal(false),
+			expect(filter(false)).to.eventually.equal(false),
+			expect(filter(false, null, "test")).to.eventually.equal(false),
+			expect(filter(false, null, {})).to.eventually.equal(false),
+			expect(filter(false, null, 123)).to.eventually.equal(false),
+			expect(filter(false, null, Symbol("test"))).to.eventually.equal(false)
 		]);
 	});
 
-	it("should return false for all other types of filters", () => {
-		expect(filter(null, null, null)).to.be(false);
-		expect(filter(null, undefined, undefined)).to.be(false);
-		expect(filter(null, "test", "test")).to.be(false);
-		expect(filter(null, 42, 42)).to.be(false);
-		expect(filter(null, Symbol.for("test"), Symbol.for("test"))).to.be(false);
+	it("should handle functions", () => {
+		const ctx = {};
+		const data = [1, "test", ctx];
+		const e = new Error("test");
+
+		return Promise.all([
+			expect(filter(() => Promise.resolve(true))).to.eventually.equal(true),
+			expect(filter(() => Promise.resolve(false))).to.eventually.equal(false),
+			expect(filter(() => Promise.resolve("test"))).to.eventually.equal(true),
+			expect(filter(() => Promise.resolve(""))).to.eventually.equal(false),
+			expect(filter(function(...args) {
+				expect(this).to.equal(undefined);
+				expect(args).to.deep.equal([]);
+
+				return true;
+			})).to.eventually.equal(true),
+			expect(filter(function(...args) {
+				expect(this).to.equal(ctx);
+				expect(args).to.deep.equal(data);
+
+				return false;
+			}, ctx, ...data)).to.eventually.equal(false),
+			expect(filter(function(...args) {
+				expect(this).to.equal(null);
+				expect(args).to.deep.equal(["test"]);
+
+				throw e;
+			}, null, "test")).to.be.rejectedWith(e),
+			expect(filter(() => Promise.reject(e))).to.be.rejectedWith(e)
+		]);
+	});
+
+	it("should reject for invalid filter types", () => {
+		const e = [TypeError, "Filters have to be booleans or functions."];
+
+		return Promise.all([
+			expect(filter()).to.be.rejectedWith(...e),
+			expect(filter(null)).to.be.rejectedWith(...e),
+			expect(filter(new Boolean(false))).to.be.rejectedWith(...e), // eslint-disable-line no-new-wrappers
+			expect(filter("true")).to.be.rejectedWith(...e),
+			expect(filter(1)).to.be.rejectedWith(...e),
+			expect(filter(Symbol())).to.be.rejectedWith(...e)
+		]);
 	});
 });
