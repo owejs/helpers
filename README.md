@@ -1,5 +1,5 @@
 # owe-helpers
 
-[![npm](https://img.shields.io/npm/v/owe-helpers.svg)](https://www.npmjs.com/package/owe-helpers) [![Build Status](https://travis-ci.org/runnr/owe-helpers.svg)](https://travis-ci.org/runnr/owe-helpers) [![Coverage Status](https://coveralls.io/repos/runnr/owe-helpers/badge.svg?branch=master&service=github)](https://coveralls.io/github/runnr/owe-helpers?branch=master) [![Dependency Status](https://david-dm.org/runnr/owe-helpers.svg)](https://david-dm.org/runnr/owe-helpers) [![devDependency Status](https://david-dm.org/runnr/owe-helpers/dev-status.svg)](https://david-dm.org/runnr/owe-helpers#info=devDependencies)
+[![npm](https://img.shields.io/npm/v/owe-helpers.svg)](https://www.npmjs.com/package/owe-helpers) [![Build Status](https://api.travis-ci.org/owejs/helpers.svg?branch=master)](https://travis-ci.org/owejs/helpers) [![Coverage Status](https://coveralls.io/repos/owejs/helpers/badge.svg?branch=master&service=github)](https://coveralls.io/github/owejs/helpers?branch=master) [![Dependency Status](https://david-dm.org/owejs/helpers.svg)](https://david-dm.org/owejs/helpers) [![devDependency Status](https://david-dm.org/owejs/helpers/dev-status.svg)](https://david-dm.org/owejs/helpers#info=devDependencies)
 
 A collection of helpers used by the owe.js ecosystem.
