@@ -23,7 +23,7 @@
 	},
 	"main": "src/index.js",
 	"devDependencies": {
-		"eslint": "4.2.0",
+		"eslint": "4.3.0",
 		"eslint-config-cortys": "1.x",
 		"chai": "4.0.1",
 		"chai-as-promised": "7.1.1",
